@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head>
+</h:head>
+<h:body>
+
+	<h:form id="itemEquipoForm">
+		<p:panelGrid id="ItemEquipo" columns="2" layout="grid"
+			columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4">
+
+
+			<h:outputText for="tipoEquipo" value="Tipo : " />
+			<p:selectOneMenu id="tipoEquipo" required="true"
+				value="#{blBean.blItemEquipo.tipoEquipo}" label="tipoEqu">
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboTipoEquipo()}" var="tiEqu" />
+			</p:selectOneMenu>
+
+			<h:outputText for="siglaEqui" value="Sigla :" />
+			<p:inputText id="siglaEqui" value="#{blBean.blItemEquipo.sigla}" required="true"/>
+
+			<h:outputText for="identEqui" value="Identificación :" />
+			<p:inputText id="identEqui" required="true"
+				value="#{blBean.blItemEquipo.identificacion}" />
+
+
+
+			<p:commandButton id="btn_addBlEquipo" value="Agregar Equipo" icon="fa fa-plus"
+				update="EquipoBlList" styleClass="btn-flat btn-primary btn-block" 
+				action="#{blBean.agregarBlEquipo()}">
+				<p:collector value="#{blBean.blItemEquipo}"
+					addTo="#{blBean.listaBlItemEquipoAux}" unique="true" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:spacer></p:spacer>
+		<p:outputPanel id="EquipoBlList">
+			<p:dataTable id="listBlEquipo" value="#{blBean.listaBlItemEquipoAux}"
+				var="blEqu" type="ordered" style="display: inline-block;width:100%">
+				<p:autoUpdate />
+				<p:column headerText="Tipo">
+					<h:outputText value="#{blEqu.tipoEquipo}" />
+				</p:column>
+				<p:column headerText="Sigla">
+					<h:outputText value="#{blEqu.sigla}" />
+				</p:column>
+				<p:column headerText="Identificación">
+					<h:outputText value="#{blEqu.identificacion}" />
+				</p:column>
+				<p:column headerText="Borrar">
+					<p:commandButton icon="fa fa-minus-square"
+						styleClass="btn-danger btn-block btn-xs" process="listBlEquipo">
+						<p:collector value="#{blEqu}"
+							removeFrom="#{blBean.listaBlItemEquipoAux}" unique="true" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</h:body>
+</html>

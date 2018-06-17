@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head>
+</h:head>
+<h:body>
+
+	<h:form id="itemImoForm">
+		<p:panelGrid id="ItemImo" columns="2" layout="grid"
+			columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4">
+
+
+			<h:outputText for="claseImo" value="Clase :" />
+			<p:inputText id="claseImo" value="#{blBean.blItemImo.claseImo}" required="true"/>
+
+			<h:outputText for="numeroImo" value="Numero :" />
+			<p:inputNumber id="numeroImo" value="#{blBean.blItemImo.numeroImo}" required="true"/>
+
+
+
+			<p:commandButton id="btn_addBlImom" value="Agregar Item Imo" update="ImoBlList" icon="fa fa-plus"
+				styleClass="btn-flat btn-primary btn-block" style="width:210px !important;text-align:center"
+				action="#{blBean.agregarBlItemImo()}">
+				<p:collector value="#{blBean.blItemImo}"
+					addTo="#{blBean.listaBlItemImoAux}" unique="true" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:spacer></p:spacer>
+		<p:outputPanel id="ImoBlList">
+			<p:dataTable id="listBlImo" value="#{blBean.listaBlItemImoAux}"
+				var="blImo" type="ordered" style="display: inline-block;width:100%">
+				<p:autoUpdate />
+				<p:column headerText="Clase">
+					<h:outputText value="#{blImo.claseImo}" />
+				</p:column>
+				<p:column headerText="Numero">
+					<h:outputText value="#{blImo.numeroImo}" />
+				</p:column>
+
+				<p:column headerText="Borrar">
+					<p:commandButton icon="fa fa-minus-square"
+						styleClass="btn-danger btn-block btn-xs" process="listBlImo">
+						<p:collector value="#{blImo}"
+							removeFrom="#{blBean.listaBlItemImoAux}" unique="true" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</h:body>
+</html>

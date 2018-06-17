@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head>
+</h:head>
+<h:body>
+
+	<h:form id="itemContenedorImoForm">
+		<p:panelGrid id="itemContenedorImo" columns="2" layout="grid"
+			columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4">
+
+
+			<h:outputText for="contenedorImoNumero" value="Numero :" />
+			<p:inputNumber id="contenedorImoNumero" value="#{blBean.blItemContenedorImo.numeroImo}" required="true" decimalPlaces="0"/>
+			
+			
+			
+			<h:outputText for="contenedorImoClase" value="Clase :" />
+			<p:inputText id="contenedorImoClase" value="#{blBean.blItemContenedorImo.claseImo}" required="true" />
+
+
+
+			<p:commandButton id="btn_addBlImoCon" value="Agregar CntImo" icon="fa fa-plus"
+				update="itemContenedorImoBlList" styleClass="btn-flat btn-primary btn-block" style="width:180px !important;text-align:center"
+				action="#{blBean.agregaContenedorImo()}">
+				<p:collector value="#{blBean.blItemContenedorImo}"
+					addTo="#{blBean.listaBlItemContenedorImoAux}" unique="true" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:spacer></p:spacer>
+		<p:outputPanel id="itemContenedorImoBlList">
+			<p:dataTable id="listBlitemContenedorImo"
+				value="#{blBean.listaBlItemContenedorImoAux}" var="blconImo" type="ordered"
+				style="display: inline-block;width:100%">
+				<p:autoUpdate />
+				<p:column headerText="Numero">
+					<h:outputText value="#{blconImo.numeroImo}" />
+				</p:column>
+				<p:column headerText="Clase">
+					<h:outputText value="#{blconImo.claseImo}" />
+				</p:column>
+				<p:column headerText="Borrar">
+					<p:commandButton icon="fa fa-minus-square"
+						styleClass="btn-danger btn-block btn-xs" process="listBlitemContenedorImo">
+						<p:collector value="#{blconImo}"
+							removeFrom="#{blBean.listaBlItemContenedorImoAux}" unique="true" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</h:body>
+</html>

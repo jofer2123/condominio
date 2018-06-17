@@ -1,0 +1,18 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces">
+
+	<url-mapping id="login">
+		<pattern value="/" />
+		<view-id value="/login.xhtml" />	
+	</url-mapping>
+	
+	<url-mapping id="admin">
+		<pattern value="/administracion" />
+		<view-id value="/pages/administracion/usuarios.xhtml" />	
+	</url-mapping>
+<url-mapping id="contro">
+		<pattern value="/control" />
+		<view-id value="/pages/control/control.xhtml" />	
+	</url-mapping>
+</pretty-config>

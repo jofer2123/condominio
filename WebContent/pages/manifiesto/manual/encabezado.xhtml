@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head> 
+<body> 
+	<h:form id="encabezadoForm">
+		<div id="encabezado">							
+			<p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >																									
+				<p:outputLabel value="Número Manifiesto"/>
+				
+				<p:selectOneMenu value="#{blBean.nroInternoMan}" required="true" label="origen">
+					<p:ajax listener="#{blBean.buscarManifiestoPorNroIn()}"
+						update="nave viaje" />
+					<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+					<f:selectItems value="#{manifiestoBean.comboActivos()}"
+						var="manActi" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="nroBl" value="Número BL"/>
+				<p:inputText id="nroBl" value="#{blBean.bl.nroBl}" required="true" >
+				
+				</p:inputText>
+										
+				<p:outputLabel for="nave" value="Nave"/>
+				<p:inputText id="nave" value="#{blBean.bl.manifiesto.nave}" required="true"/>
+										
+				<p:outputLabel for="viaje" value="Viaje"/>
+				<p:inputText id="viaje" value="#{blBean.bl.manifiesto.viaje}" required="true"/>
+										
+				<p:outputLabel for="tipoServicio" value="Tipo Servicio"/>
+				<p:selectOneMenu id="tipoServicio" required="true"
+					value="#{blBean.bl.tipoServicio}" label="tipoSe">
+						
+					<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+					<f:selectItems value="#{blBean.comboTipoServicio()}" var="tipoS" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="sentOperacion" value="Sentido Operación"/>
+				<p:selectOneMenu id="sentOperacion" required="true"
+					value="#{blBean.blTransporte.sentidoOperacion}"
+					label="sentOperacion">		
+									
+					<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+					<f:selectItems value="#{blBean.comboSentidoOper()}" var="senOper" />
+				</p:selectOneMenu>	
+				
+				
+				
+			
+				
+				<p:outputLabel for="fechaPresent" value="Fecha Presentación"/>
+				<p:calendar id="fechaPresent" value="#{blBean.blFecha.valor}"
+					pattern="MM/dd/yyyy HH:mm:ss" locale="es" >
+				
+				</p:calendar>	
+				
+				<p:outputLabel for="checkSag" value="Inspección"/>	
+				<p:selectManyCheckbox id="checkSag"
+					value="#{blBean.check}">
+					<f:selectItem itemLabel="Aforo" itemValue="aforo" />
+					<f:selectItem itemLabel="SAG" itemValue="sag" />
+				</p:selectManyCheckbox>		
+				<p:remoteCommand name="rc"  actionListener="#{blBean.encabezado()}" />	
+			</p:panelGrid>
+			</div>
+		</h:form>			
+</body> 
+</html>

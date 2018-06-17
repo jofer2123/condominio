@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head>
+<body>
+<h:form id="locacionesForm">
+		<p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >																			
+			<p:outputLabel for="nombreCombo" value="Tipo"/>
+			<p:selectOneMenu id="nombreCombo" required="true"
+				value="#{blBean.blLocacion.nombre}" label="tipoLoc">
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboTipoLocacion()}" var="tipLoc" />
+			</p:selectOneMenu>
+						
+			<p:outputLabel for="codLoc" value="Código"/>
+			<p:inputText id="codLoc" value="#{blBean.blLocacion.codigo}" required="true"/>
+						
+			<p:outputLabel for="descripLoc" value="Descripción"/>
+			<p:inputText id="descripLoc" value="#{blBean.blLocacion.descripcion}" required="true"/>
+			
+			<p:spacer />
+			
+			<p:commandButton id="btn_addBlLocacion" icon="fa fa-plus" value="Agregar Locacion" update="locacionesBlList" styleClass="btn-flat btn-primary btn-block" 
+				action="#{blBean.agregarBlLocaciones()}" >
+				<p:collector value="#{blBean.blLocacion}" addTo="#{blBean.listaBlLocacionAux}" unique="true"/>
+			</p:commandButton>
+		</p:panelGrid>		
+					
+		<p:spacer/>
+		<p:outputPanel id="locacionesBlList">
+			<p:dataTable id="listBlLocaciones"
+				value="#{blBean.listaBlLocacionAux}" var="blLoc" type="ordered"
+				style="display: inline-block;width:100%">
+				<p:autoUpdate />
+				<p:column headerText="Codigo">
+					<h:outputText value="#{blLoc.codigo}" />
+				</p:column>
+				<p:column headerText="Tipo">
+					<h:outputText value="#{blLoc.nombre}" />
+				</p:column>
+				<p:column headerText="Descripción">
+					<h:outputText value="#{blLoc.descripcion}" />
+				</p:column>
+				<p:column headerText="Borrar">
+					<p:commandButton icon="fa fa-minus-square" styleClass="btn-danger btn-block btn-xs"  process="listBlLocaciones">
+						<p:collector value="#{blLoc}"
+							removeFrom="#{blBean.listaBlLocacionAux}" unique="true" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</body>
+</html>

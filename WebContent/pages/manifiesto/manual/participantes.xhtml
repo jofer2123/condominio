@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head>
+<body>
+	<h:form id="blParticipantesForm">
+		<p:panelGrid id="participantes" columns="4" layout="grid" 
+			columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >
+			<p:outputLabel for="nombreCombo" value="Participante"/>
+			<p:selectOneMenu id="nombreCombo" required="true"
+				value="#{blBean.blParticipante.tipoParticipante}" label="tipoPar">
+				<p:ajax listener="#{blBean.muestraCamposDCMF()}"
+					update="participantes" />
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboNombreParticipantes()}"
+					var="tipPa" />
+			</p:selectOneMenu>
+		
+			<p:outputLabel for="tipoPart" value="Tipo ID"/>
+			<p:selectOneMenu id="tipoPart" 
+				value="#{blBean.blParticipante.tipoId}" label="tipoPar">
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboTipoParticipante()}"
+					var="tipoPa" />
+			</p:selectOneMenu>
+			
+			<p:outputLabel for="rutPart" value="Valor ID"/>
+			
+			  <p:autoComplete id="rutPart"   value="#{blBean.blParticipante.valorId}" completeMethod="#{blBean.autoCompletaParticipantes()}">
+                   <p:ajax event="keyup"  />
+                   <p:ajax event="itemSelect" update="codAlmacen direcPart codComuna nomPart" listener="#{blBean.cargaParticipante()}"/>
+					</p:autoComplete>	
+			<p:outputLabel for="nomPart" value="Nombre"/>
+			<p:inputText id="nomPart" value="#{blBean.blParticipante.nombres}" required="true"/>
+			
+			<p:outputLabel for="direcPart" value="Direccion" rendered="#{blBean.aux}"/>
+			<p:inputText id="direcPart"
+				value="#{blBean.blParticipante.direccion}" rendered="#{blBean.aux}" />
+						
+			<p:outputLabel for="mailPart" value="Correo" rendered="#{blBean.aux}"/>
+			<p:inputText id="mailPart" value="#{blBean.blParticipante.email}"
+				rendered="#{blBean.aux}" />
+						
+			<p:outputLabel for="fonoPart" value="Teléfono" rendered="#{blBean.aux}"/>
+			<p:inputText id="fonoPart" value="#{blBean.blParticipante.telefono}"
+				rendered="#{blBean.aux}" />
+			
+			<p:outputLabel for="nacioId" value="Nación ID" />
+			<p:selectOneMenu id="nacioId"
+				value="#{blBean.blParticipante.nacionId}" label="tipoPar">			
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboNacionId()}" var="nacPa" />
+			</p:selectOneMenu>
+						
+			<p:outputLabel for="codigoPais" value="Código País" />
+			<p:selectOneMenu id="codigoPais"
+				value="#{blBean.blParticipante.codigoPais}" label="tipoPar">			
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboNacionId()}" var="codPa" />
+			</p:selectOneMenu>
+			
+			<p:outputLabel for="codAlmacen" value="Código Almacén"
+				rendered="#{blBean.blParticipante.tipoParticipante.equals('ALM')}" />
+			<p:inputText id="codAlmacen"
+				rendered="#{blBean.blParticipante.tipoParticipante.equals('ALM')}"
+				value="#{blBean.blParticipante.codigoAlmacen}" />
+			
+				
+						
+			<p:outputLabel for="codComuna" value="Comuna" rendered="#{blBean.aux}" />
+			<p:selectOneMenu id="codComuna" rendered="#{blBean.aux}"
+				value="#{blBean.blParticipante.comuna}" label="tipoPar">			
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboComuna()}" var="tipPa" />
+			</p:selectOneMenu>
+			
+			<p:spacer /><p:spacer /><p:spacer />
+			
+			<p:commandButton id="btn_addBlParticipante" value="Agregar Participante" update="listPartiBl" icon="fa fa-plus" styleClass="btn-flat btn-primary btn-block" 
+				action="#{blBean.agregarBlParticipante()}" >
+				<p:collector value="#{blBean.blParticipante}" addTo="#{blBean.listaBlParticipanteAux}" unique="true"/>
+				</p:commandButton>
+		</p:panelGrid>
+
+	<p:spacer/>
+	<p:outputPanel id="listPartiBl">
+		<p:dataTable id="listBlParticipantes"
+			value="#{blBean.listaBlParticipanteAux}" var="blPart" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="tipo">
+				<h:outputText value="#{blPart.tipoParticipante}" />
+			</p:column>
+			<p:column headerText="tipo id">
+				<h:outputText value="#{blPart.tipoId}" />
+			</p:column>
+			<p:column headerText="id">
+				<h:outputText value="#{blPart.valorId}" />
+			</p:column>
+			<p:column headerText="Nombre">
+				<h:outputText value="#{blPart.nombres}" />
+			</p:column>
+			<p:column headerText="Nacion">
+				<h:outputText value="#{blPart.nacionId}" />
+			</p:column>
+			<p:column headerText="Cod Pais">
+				<h:outputText value="#{blPart.codigoPais}" />
+			</p:column>
+			<p:column headerText="Comuna">
+				<h:outputText value="#{blPart.comuna}" />
+			</p:column>
+			<p:column headerText="Fono">
+				<h:outputText value="#{blPart.telefono}" />
+			</p:column>
+			<p:column headerText="Dirección">
+				<h:outputText value="#{blPart.direccion}" />
+			</p:column>
+			<p:column headerText="Mail">
+				<h:outputText value="#{blPart.email}" />
+			</p:column>
+			
+
+			<p:column headerText="Borrar">
+				<p:commandButton icon="fa fa-minus-square" styleClass="btn-danger btn-block btn-xs" process="listBlParticipantes"  >
+					<p:collector value="#{blPart}"
+						removeFrom="#{blBean.listaBlParticipanteAux}" unique="true" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+</body>
+
+</html>

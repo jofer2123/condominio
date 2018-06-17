@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:outputStylesheet library="css" name="styles.css" />
+<h:head>
+	<title>carga manifiesto automática</title>
+
+</h:head>
+<h:body>
+
+	<f:event type="preRenderView"
+		listener="#{manifiestoCargaAutoBean.onload}" />
+
+
+
+	<h:form onkeyup="if(event.keyCode == 13) return false;">
+		<p:ajaxStatus onstart="PF('statusDialog').show();"
+			onsuccess="PF('statusDialog').hide();" />
+
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/img/ajax-loader.gif" />
+		</p:dialog>
+
+		<p:messages id="mensajes" closable="true">
+		</p:messages>
+		<p:panelGrid columns="5" layout="grid"
+			columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-3"
+			id="PanelCargaAuto">
+
+			<p:outputLabel for="manifiestos" value="Manifiesto - M/N" />
+			<p:selectOneMenu id="manifiestos"
+				converter="omnifaces.SelectItemsConverter"
+				value="#{manifiestoCargaAutoBean.manifiesto}">
+				<f:selectItem noSelectionOption="true"></f:selectItem>
+				<f:selectItems value="#{manifiestoCargaAutoBean.manifiestos}"
+					var="man" itemLabel="#{man.nroMftoInterno} - #{man.nave}"
+					itemValue="#{man}" />
+				<f:ajax event="change"
+					listener="#{manifiestoCargaAutoBean.setManifiestoSelec()}"
+					render="mensajes detalleMan"></f:ajax>
+			</p:selectOneMenu>
+
+			<p:commandButton styleClass="btn btn-success btn-block"
+				value="Cargar" icon="fa fa-fw fa-download"
+				action="#{manifiestoCargaAutoBean.cargaManifiesto()}" update="@form"
+				onstart="PF('carsTable').clearFilters()">
+			</p:commandButton>
+
+		</p:panelGrid>
+
+		<p:separator style="width:5px;height:5px" />
+
+		<p:panel visible="#{manifiestoCargaAutoBean.detalleManif}"
+			id="detalleMan">
+
+			<p:panelGrid columns="10" layout="grid" id="panelManif"
+				columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-5,ui-grid-col-6">
+
+				<p:outputLabel value="M/N:" />
+				<p:outputLabel
+					style="font-weight:bold; font-size: 18px; line-height: 1.3;"
+					value="#{manifiestoCargaAutoBean.manifiesto.nave}" />
+
+				<p:outputLabel value="MFTO:" />
+				<p:outputLabel
+					style="font-weight:bold; font-size: 18px; line-height: 1.3;"
+					value="#{manifiestoCargaAutoBean.manifiesto.nroMfto}" />
+
+				<p:outputLabel value="SERVICIO:" />
+				<p:outputLabel
+					style="font-weight:bold; font-size: 18px; line-height: 1.3;"
+					value="#{manifiestoCargaAutoBean.manifiesto.servicio}" />
+
+				<p:outputLabel value="AGENCIA:" />
+				<p:outputLabel
+					style="font-weight:bold; font-size: 18px; line-height: 1.3;"
+					value="#{manifiestoCargaAutoBean.manifiesto.agencia}" />
+
+				<p:outputLabel value="ÚLTIMA LECTURA:" />
+				<p:outputLabel rendered="#{manifiestoCargaAutoBean.fechaUltLec}"
+					style="font-weight:bold; font-size: 18px; line-height: 1.3;"
+					value="#{of:formatDate(manifiestoCargaAutoBean.manifiesto.fechaUltLec , 'dd-MM-yyyy HH:mm')}" />
+				<p:outputLabel rendered="#{!manifiestoCargaAutoBean.fechaUltLec}"
+					value="-" />
+			</p:panelGrid>
+
+			<p:separator style="width:5px;height:5px" />
+
+			<p:panelGrid columns="3" layout="grid" style="text-align: center;"
+				columnClasses="ui-grid-col-4,ui-grid-col-4, ui-grid-col-4"
+				id="panelBotones">
+
+				<p:column>
+					<p:commandButton styleClass="btn-flat btn-primary btn-block"
+						action="#{manifiestoCargaAutoBean.cargaManifiesto()}" ajax="false"
+						value="Listado General de Contenedores" icon="fa fa-fw fa-list-ul">
+						<p:fileDownload value="#{manifiestoCargaAutoBean.downloadExcel()}" />
+					</p:commandButton>
+				</p:column>
+
+				<p:column>
+					<p:commandButton styleClass="btn-flat btn-primary btn-block"
+						action="#{manifiestoCargaAutoBean.cargaManifiesto()}"
+						value="Generar Estructura" icon="fa fa-fw fa-gears" />
+				</p:column>
+
+				<p:column>
+					<p:commandButton styleClass="btn-flat btn-primary btn-block"
+						action="#{manifiestoCargaAutoBean.buscarActualizaciones()}"
+						onstart="PF('carsTable').clearFilters()"
+						value="Buscar Actualizaciones" icon="fa fa-fw fa-refresh"
+						update="@form">
+
+					</p:commandButton>
+				</p:column>
+
+			</p:panelGrid>
+
+			<p:separator style="height:20px" />
+
+			<p:dataTable var="bls" value="#{manifiestoCargaAutoBean.listaBls}"
+				paginator="true" rows="30" rowsPerPageTemplate="30,60,90"
+				widgetVar="carsTable" rowIndexVar="rowId"
+				emptyMessage="No existen bl's con los criterios entregados"
+				filteredValue="#{manifiestoCargaAutoBean.listaFiltro}"
+				style="text-align: center;">
+
+				<f:facet name="header">
+					<p:outputPanel style="text-align: right;">
+
+						<p:panelGrid columns="3" layout="grid" style="text-align: center;"
+							columnClasses="ui-grid-col-4,ui-grid-col-4, ui-grid-col-4"
+							id="botonesSecundarios">
+
+							<p:column>
+
+								<p:commandButton style="color:white ; background-color: red"
+									value="Cambiar estado de Manifiesto"
+									icon="fa fa-fw fa-exclamation-triangle">
+									<p:confirm header="Confirmación"
+										message="¿Esta seguro que quiere cambiar el estado de ACTIVO a TRASPASADO?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="fade">
+									<p:commandButton value="Yes"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+										actionListener="#{manifiestoCargaAutoBean.cambiarEstado()}"
+										action="#{manifiestoCargaAutoBean.redireccionar('traspasados')}"/>
+									<p:commandButton value="No" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+							</p:column>
+
+							<p:column>
+							</p:column>
+
+							<p:column>
+								<p:inputText id="globalFilter" maxlength="35" autocomplete="off"
+									title="Filtro global de la tabla"
+									onkeypress="if(event.keyCode == 13) return false"
+									styleClass="filtroGlobal" placeholder="Buscar...">
+									<f:ajax event="keyup" delay="800"
+										onevent="function(data){if(data.status=='success') PF('carsTable').filter()}" />
+								</p:inputText>
+							</p:column>
+						</p:panelGrid>
+
+					</p:outputPanel>
+				</f:facet>
+
+				<p:column headerText="#" width="45">
+					<h:outputText value="#{rowId + 1}" />
+				</p:column>
+
+				<p:column headerText="Nro BL" filterBy="#{bls.nroBl}"
+					filterStyle="display:none" filterMatchMode="contains">
+					<p:commandLink action="#{blBean.cargaBlModal(bls)}"
+						onclick="PF('dlgBl').show();">#{bls.nroBl}</p:commandLink>
+				</p:column>
+
+				<p:column headerText="Estado" filterBy="#{bls.tipoAccionEstado}"
+					filterStyle="display:none" filterMatchMode="contains">
+					<h:outputText value="#{bls.tipoAccionEstado}" />
+				</p:column>
+
+				<p:column headerText="Fecha"
+					filterBy="#{of:formatDate(bls.fechaPresentacion, 'dd-MM-yyyy HH:mm')}"
+					filterStyle="display:none" filterMatchMode="contains">
+					<h:outputText
+						value="#{of:formatDate(bls.fechaPresentacion, 'dd-MM-yyyy HH:mm')}" />
+				</p:column>
+
+				<p:column headerText="Manifiesto"
+					filterBy="#{bls.manifiesto.nroMfto}" filterStyle="display:none"
+					filterMatchMode="contains">
+					<h:outputText value="#{bls.manifiesto.nroMfto}" />
+				</p:column>
+
+				<p:column headerText="Emisor" width="300"
+					filterBy="#{bls.nombreParticipanteEmisor}"
+					filterStyle="display:none" filterMatchMode="contains">
+					<h:outputText value="#{bls.nombreParticipanteEmisor}" id="emisorBl">
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+	<p:dialog header="Detalle de BL" widgetVar="dlgBl" modal="true"
+		height="550" width="80%">
+		<ui:include src="vistaautoBl.xhtml" />
+	</p:dialog>
+</h:body>
+</html>

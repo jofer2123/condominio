@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head>
+<body>
+<h:form id="contenedorForm">
+<p:panelGrid id="contenedor" columns="2" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4">
+			
+			<h:outputText  value="Nro Contenedor: " />
+			<h:panelGrid columns="6">
+			<p:inputText id="siglaCont" value="#{blBean.blItemContenedor.sigla}" maxlength="4" style="width: 55px;"/>
+			<p:watermark for="siglaCont" value="Sigla"  />
+			<p:inputText id="numeroCont" value="#{blBean.blItemContenedor.numero}" maxlength="6" style="width: 65px;"/>
+			<p:watermark for="numeroCont" value="Numero"  />
+			<p:inputNumber id="digitoCont" value="#{blBean.blItemContenedor.digito}" maxValue="9" decimalPlaces="0" style="width:55px!important;"/>
+			 <p:watermark for="digitoCont" value="Digito" />
+			</h:panelGrid>
+			
+			<h:outputText for="tipoBlCont" value="Tipo Contenedor  :  " />
+			<p:inputText id="tipoBlCont" value="#{blBean.blItemContenedor.tipoCnt}" />
+			
+			<h:outputText for="pesoBllItemsCont" value="Peso Contenedor:  " />
+			<p:inputNumber id="pesoBllItemsCont" value="#{blBean.blItemContenedor.peso}" decimalPlaces="3" required="true"/>
+			
+			
+			
+			<h:outputText for="operadorConte" value="Operador  :  " />
+			<p:inputText id="operadorConte" value="#{blBean.blItemContenedor.nombreOperador}" required="true"/>
+			
+			
+			
+			<h:outputText for="statusCont" value="Status  :  " />
+			<p:selectOneMenu id="statusCont"
+				value="#{blBean.blItemContenedor.estado}" label="tipoLoc">
+				<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+				<f:selectItems value="#{blBean.comboStatusContenedor()}" var="uniPeso" />
+			</p:selectOneMenu>
+		
+			<p:commandButton id="btn_addBlItemContenedor" icon="fa fa-plus" value="Agregar Contenedor" update="contenedoresPanellist"  styleClass="btn-flat btn-primary btn-block" style="width:200px !important;text-align:center"
+				action="#{blBean.agregarBlContenedor()}" >
+				<p:collector value="#{blBean.blItemContenedor}" addTo="#{blBean.listaBlItemContenedorAux}" unique="true"/>
+				</p:commandButton>
+		</p:panelGrid>
+		<p:spacer/>	
+		<p:panelGrid columns="2" styleClass="card no-border">
+			<p:commandButton id="addContenedorSello" value=" Agregar Sello"
+				styleClass="btn btn-success" type="button"
+				disabled="#{blBean.agregaSelloImo}" update="containSello"
+				onclick="PF('contenedorSelloDialog').show();" />
+			<p:commandButton id="addContenedorImo" value=" Agregar CntImo"
+				styleClass="btn btn-success" type="button"
+				disabled="#{blBean.agregaSelloImo}" update="containImo"
+				onclick="PF('contenedorImoDialog').show();" />
+		</p:panelGrid>
+	<p:spacer/>		
+
+<p:outputPanel id="contenedoresPanellist">
+		<p:dataTable id="listBlContenedor"
+			value="#{blBean.listaBlItemContenedorAux}" var="blCon" type="ordered"
+			style="display: inline-block;width:100%"
+			rowSelectListener="#{blBean.validaSelloImo()}"  selection="#{blBean.blItemContenedorAux}" rowKey="#{blCon.numero}"
+			>
+			<p:column  selectionMode="single" style="width:38px !important;text-align:center"/>
+			<p:ajax event="rowSelectRadio"  listener="#{blBean.validaSelloImo()}" update="@form"/>
+			<p:autoUpdate />
+			<p:column headerText="Nro ">
+				<h:outputText value="#{blCon.numero}" />
+			</p:column>
+			<p:column headerText="Operador">
+				<h:outputText value="#{blCon.nombreOperador}" />
+			</p:column>
+			<p:column headerText="Peso">
+				<h:outputText value="#{blCon.peso}" />
+			</p:column>
+			<p:column>
+				<p:commandButton icon="fa fa-minus-square"
+						styleClass="btn-danger btn-block btn-xs" process="listBlContenedor">
+					<p:collector value="#{blCon}"
+						removeFrom="#{blBean.listaBlItemContenedorAux}" unique="true" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+<p:dialog id="containSello" header="Sello" widgetVar="contenedorSelloDialog" showEffect="explode" modal="true" width="60%">
+			<ui:include src="itemContenedorSello.xhtml" />
+	</p:dialog>
+	<p:dialog id="containImo" header="CntImo" widgetVar="contenedorImoDialog" showEffect="explode" modal="true" width="60%">
+ 			<ui:include src="cntImo.xhtml" />
+	</p:dialog>
+</body>
+</html>

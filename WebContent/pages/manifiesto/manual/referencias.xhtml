@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head>
+<body>
+<h:form id="referenciasForm">
+	<p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >		
+		<p:outputLabel for="tipoRef" value="Tipo Referencia"/>
+		<p:selectOneMenu id="tipoRef" required="true"
+			value="#{blBean.blReferencia.tipoReferencia}" label="tipoLoc">
+			<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+			<f:selectItems value="#{blBean.comboTipoReferencia()}" var="uniPeso" />
+		</p:selectOneMenu>
+				
+		<p:outputLabel for="nroApectacionRef" value="Nro Aceptación"/>
+		<p:inputText id="nroApectacionRef" value="#{blBean.blReferencia.numero}" required="true"/>
+				
+		<p:outputLabel for="fechaReferencia" value="Fecha Referencia"/>
+		<p:calendar id="fechaReferencia" value="#{blBean.blReferencia.fecha}" required="true"
+			 locale="es" />						
+				
+		<p:outputLabel for="tipoEmisoReferencia" value="Tipo ID"/>
+		<p:selectOneMenu id="tipoEmisoReferencia"
+			value="#{blBean.blReferencia.tipoIdEmisor}" label="tipoLoc">
+			<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+			<f:selectItems value="#{blBean.comboTipoParticipante()}" var="uniPeso" />
+		</p:selectOneMenu>
+		
+		<p:outputLabel for="idEmisorReferencia" value="Valor ID"/>
+		<p:inputText id="idEmisorReferencia" value="#{blBean.blReferencia.valorIdEmisor}" />
+				
+		<p:outputLabel for="nacEmisorRef" value="Nación Emisor"/>
+		<p:selectOneMenu id="nacEmisorRef"
+			value="#{blBean.blReferencia.nacIdEmisor}" label="tipoLoc">
+			<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+			<f:selectItems value="#{blBean.comboNacionId()}" var="uniPeso" />
+		</p:selectOneMenu>
+		<p:outputLabel for="TipoDocRef" value="Tipo Doc"/>
+		<p:selectOneMenu id="TipoDocRef" required="true"
+			value="#{blBean.blReferencia.tipoDocumento}" label="tipoLoc">
+			<f:selectItem itemLabel="Seleccione..." itemValue="0" />
+			<f:selectItems value="#{blBean.comboTipoDocumento()}" var="uniPeso" />
+		</p:selectOneMenu>
+				
+		<p:outputLabel for="nombreEmisorReferencia" value="Nombre Emisor"/>
+		<p:inputText id="nombreEmisorReferencia" value="#{blBean.blReferencia.emisor}" />
+		
+		<p:spacer/><p:spacer/><p:spacer/>
+		
+		<p:commandButton id="btn_addBlReferencia" value="Agregar Referencia" icon="fa fa-plus" update="referenciaPanel" styleClass="btn-flat btn-primary btn-block" 
+			action="#{blBean.agregarBlReferencia()}" >
+			<p:collector value="#{blBean.blReferencia}" addTo="#{blBean.listaBlReferenciaAux}" unique="true"/>
+			</p:commandButton>
+	</p:panelGrid>
+
+	<p:spacer/>
+
+	<p:outputPanel id="referenciaPanel">
+		<p:dataTable id="listBlReferencia"
+			value="#{blBean.listaBlReferenciaAux}" var="blRef" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="Tipo Ref">
+				<h:outputText value="#{blRef.tipoReferencia}" />
+			</p:column>
+			<p:column headerText="Tipo Doc">
+				<h:outputText value="#{blRef.tipoDocumento}" />
+			</p:column>
+			<p:column headerText="Numero">
+				<h:outputText value="#{blRef.numero}" />
+			</p:column>
+			<p:column headerText="Fecha">
+				<h:outputText value="#{blRef.fecha}" />
+			</p:column>
+			<p:column headerText="Tipo Emi">
+				<h:outputText value="#{blRef.tipoIdEmisor}" />
+			</p:column>
+			<p:column headerText="Emisor">
+				<h:outputText value="#{blRef.emisor}" />
+			</p:column>
+			<p:column headerText="id Emisor">
+				<h:outputText value="#{blRef.valorIdEmisor}" />
+			</p:column>
+			
+			<p:column>
+				<p:commandButton icon="fa fa-minus-square" styleClass="btn-danger btn-block btn-xs" process="listBlReferencia">
+					<p:collector value="#{blRef}"
+						removeFrom="#{blBean.listaBlReferenciaAux}" unique="true" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+</body>
+</html>

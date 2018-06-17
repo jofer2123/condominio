@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:outputStylesheet library="css" name="styles.css" />
+<h:head>
+	<title>Programación de Faena</title>
+
+</h:head>
+<h:body>
+	<ui:composition template="/index.xhtml">
+		<ui:define name="content-begin">
+<h:form>
+<p:panelGrid id="participantes" columns="4" layout="grid" styleClass="ui-flat"
+			columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >
+	<p:outputLabel for="mtfoTras" value="Manifiesto - M/N" />
+			<p:selectOneMenu id="mtfoTras"
+				value="#{programacionFaenaBean.nroInterManf}">
+				<f:selectItem noSelectionOption="true"></f:selectItem>
+					<f:selectItems value="#{programacionFaenaBean.comboActivos()}"
+					var="tipoPa" />
+				
+			</p:selectOneMenu>
+			<p:commandButton styleClass="btn btn-success btn-block"
+				value="Cargar" icon="fa fa-fw fa-download"
+				action="#{programacionFaenaBean.cargaProgramacionConsolidado()}" >
+			</p:commandButton>
+</p:panelGrid>
+</h:form>
+<h:form>
+		<p:dataTable var="est" value="#{programacionFaenaBean.listaDesconsolidar()}">
+			<p:column headerText="Contenedor">
+						<h:outputText value="#{est.contenedor}" />
+			</p:column>
+				<p:column headerText="Manifiesto">
+						<h:outputText value="#{est.manifiesto.nroMftoInterno}" />
+			</p:column>
+			<p:column headerText="Tipo">
+						<h:outputText value="#{est.tipo}" />
+			</p:column>
+			<p:column headerText="Status">
+						<h:outputText value="#{est.status}" />
+			</p:column>
+			<p:column headerText="inicio faena">
+						<h:outputText value="#{est.inicioFaena}" />
+			</p:column>
+			<p:column headerText="fin faena">
+						<h:outputText value="#{est.finFaena}" />
+			</p:column>
+			<p:column headerText="inicio inscripcion">
+						<h:outputText value="#{est.inicioInscripcion}" />
+			</p:column>
+			<p:column headerText="fin inscripcion">
+						<h:outputText value="#{est.finInscripcion}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+		</ui:define>
+	</ui:composition>
+
+
+
+
+</h:body>
+</html>

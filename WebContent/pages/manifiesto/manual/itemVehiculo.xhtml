@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head>
+</h:head>
+<h:body>
+
+<h:form id="itemVehiculoForm">
+<p:panelGrid id="ItemVehiculo" columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4, 
+				ui-grid-col-2,ui-grid-col-4, ui-grid-col-2,ui-grid-col-4">
+
+
+			<h:outputText for="modeloVehiculo" value="Modelo : " />
+			<p:inputText id="modeloVehiculo" value="#{blBean.blItemVehiculo.modelo}" />
+			
+			<h:outputText for="idCajon" value="id Cajón" />
+			<p:inputText id="idCajon" value="#{blBean.blItemVehiculo.idCajon}" />
+			
+			<h:outputText for="marcaVeh" value="Marca :" />
+			<p:inputText id="marcaVeh" value="#{blBean.blItemVehiculo.marca}" required="true"/>
+			
+			<h:outputText for="chassisVe" value="Chassís :" />
+			<p:inputText id="chassisVe" value="#{blBean.blItemVehiculo.chassis}" required="true"/>
+			
+			<h:outputText for="observacionVeh" value="Observacion :" />
+			<p:inputText id="observacionVeh" value="#{blBean.blItemVehiculo.observacion}" />
+			
+			<p:commandButton id="btn_addBlVehiculo" icon="fa fa-plus" value="Agregar Vehiculo" update="vehiculosBlList" styleClass="btn-flat btn-primary btn-block" style="width:210px !important;text-align:center"
+				action="#{blBean.agregarBlVehiculo()}" >
+				<p:collector value="#{blBean.blItemVehiculo}" addTo="#{blBean.listaBlItemVehiculoAux}" unique="true"/>
+				</p:commandButton>
+		</p:panelGrid>
+			
+<p:spacer></p:spacer>
+<p:outputPanel id="vehiculosBlList">
+		<p:dataTable id="listBlVehiculos"
+			value="#{blBean.listaBlItemVehiculoAux}" var="blVe" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="Modelo">
+				<h:outputText value="#{blVe.modelo}" />
+			</p:column>
+			<p:column headerText="Id Cajón">
+				<h:outputText value="#{blVe.idCajon}" />
+			</p:column>
+			<p:column headerText="Marca">
+				<h:outputText value="#{blVe.marca}" />
+			</p:column>
+			<p:column headerText="Chassís">
+				<h:outputText value="#{blVe.chassis}" />
+			</p:column>
+			<p:column headerText="Observación">
+				<h:outputText value="#{blVe.observacion}" />
+			</p:column>
+			<p:column headerText="Borrar">
+				<p:commandButton icon="fa fa-minus-square" styleClass="btn-danger btn-block btn-xs"  process="listBlVehiculos">
+					<p:collector value="#{blVe}"
+						removeFrom="#{blBean.listaBlItemVehiculoAux}" unique="true" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		</p:outputPanel>
+	</h:form>
+
+</h:body>
+</html>

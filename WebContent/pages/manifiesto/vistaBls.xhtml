@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:head></h:head>
+<body>
+<p:panel  header="Encabezado" style="margin-bottom:20px"
+			styleClass="card no-border">
+			<p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" >
+			<p:autoUpdate/>
+			<p:outputLabel value="Número Manifiesto" />
+			<p:outputLabel value="#{blBean.bl.manifiesto.nroMfto}" />
+
+			<p:outputLabel value="Número BL" />
+			<p:outputLabel value="#{blBean.bl.nroBl}" />
+			
+			<p:outputLabel value="Fecha Presentación" />
+			<p:outputLabel value="#{blBean.bl.fechaPresentacion}" />
+
+			<p:outputLabel value="Nave" />
+			<p:outputLabel value="#{blBean.bl.manifiesto.nave}" />
+			<p:outputLabel value="Viaje" />
+			<p:outputLabel value="#{blBean.bl.manifiesto.viaje}" />
+			
+
+
+			<p:outputLabel value="Tipo Servicio" />
+			<p:outputLabel value="#{blBean.bl.tipoServicio}" />
+
+			
+			
+
+			
+
+			<p:outputLabel value="Sag" />
+			<p:outputLabel value="#{blBean.bl.blSag}" />
+			<p:outputLabel value="Aforo" />
+			<p:outputLabel value="#{blBean.bl.blAforo}" />
+
+		</p:panelGrid>
+			
+		</p:panel>
+
+		<p:panel header="Participaciones" style="margin-bottom:20px"
+			styleClass="card no-border">
+			<p:dataTable id="listBlParticipantesVista"
+			value="#{blBean.bl.blParticipantes}" var="blPart" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="tipo">
+				<h:outputText value="#{blPart.tipoParticipante}" />
+			</p:column>
+			<p:column headerText="tipo id">
+				<h:outputText value="#{blPart.tipoId}" />
+			</p:column>
+			<p:column headerText="id">
+				<h:outputText value="#{blPart.valorId}" />
+			</p:column>
+			<p:column headerText="Nombre">
+				<h:outputText value="#{blPart.nombres}" />
+			</p:column>
+			<p:column headerText="Nacion">
+				<h:outputText value="#{blPart.nacionId}" />
+			</p:column>
+			
+			<p:column headerText="Comuna">
+				<h:outputText value="#{blPart.comuna}" />
+			</p:column>
+			<p:column headerText="Fono">
+				<h:outputText value="#{blPart.telefono}" />
+			</p:column>
+			
+			
+		</p:dataTable>
+		</p:panel>
+		<p:panel header="Locaciones" style="margin-bottom:20px"
+			styleClass="card no-border">
+			<p:dataTable id="listBlLocacionesVs"
+				value="#{blBean.bl.blLocacions}" var="blLoc" type="ordered"
+				style="display: inline-block;width:100%">
+				<p:autoUpdate />
+				<p:column headerText="Codigo">
+					<h:outputText value="#{blLoc.codigo}" />
+				</p:column>
+				<p:column headerText="Tipo">
+					<h:outputText value="#{blLoc.nombre}" />
+				</p:column>
+				<p:column headerText="Descripción">
+					<h:outputText value="#{blLoc.descripcion}" />
+				</p:column>
+				
+			</p:dataTable>
+
+		</p:panel>
+		<p:panel header="Transbordos" style="margin-bottom:20px" rendered="false"
+			styleClass="card no-border">
+			
+<p:dataTable id="listBlTransbordosVs"
+			value="#{blBean.bl.blTransbordos}" var="blT" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="Codigo">
+				<h:outputText value="#{blT.codigoLugar}" />
+			</p:column>
+			<p:column headerText="Fecha">
+				<h:outputText value="#{blT.fechaArribo}" />
+			</p:column>
+			<p:column headerText="Descripción">
+				<h:outputText value="#{blT.descripcionLugar}" />
+			</p:column>
+			
+		</p:dataTable>
+		</p:panel>
+		<p:panel header="Items" style="margin-bottom:20px"
+			styleClass="card no-border">
+		<p:dataTable id="listBlitemVs" value="#{blBean.bl.blItems}" var="blI"
+			type="ordered" style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column style="width:38px !important;text-align:center">
+				<p:rowToggler />
+			</p:column>
+			<p:column headerText="Nro Item">
+				<h:outputText value="#{blI.nroItem}" />
+			</p:column>
+			<p:column headerText="Marcas">
+				<h:outputText value="#{blI.marcas}" />
+			</p:column>
+			<p:column headerText="Tipo Bultos">
+				<h:outputText value="#{blI.tipoBulto.tipoBulto}" />
+			</p:column>
+			<p:column headerText="Nro Bultos">
+				<h:outputText value="#{blI.cantidad}" />
+			</p:column>
+			<p:column headerText="Peso">
+				<h:outputText value="#{blI.unidadPeso}: #{blI.pesoBruto}" />
+			</p:column>
+			<p:column headerText="Volumen">
+				<h:outputText value="#{blI.unidadVolumen}: #{blI.volumen}" />
+			</p:column>
+			<p:column headerText="Descripcion">
+				<h:outputText value="#{blI.descripcion}" />
+			</p:column>
+
+			<p:column headerText="CP">
+				<h:outputText value="#{blI.cargaPeligrosa}" />
+			</p:column>
+			<p:column headerText="Cnt">
+				<h:outputText value="#{blI.cargaCnt}" />
+			</p:column>
+			<p:rowExpansion>
+			<p:panel styleClass="card box-success">
+				<p:dataTable id="listBlitemVs" value="#{blI.blItemContenedors}"
+					var="blCon" type="ordered" style="display: inline-block;width:100%">
+					<f:facet name="header">
+						<h:outputText value="Contenedores" />
+					</f:facet>
+					<p:autoUpdate />
+					
+					<p:column headerText="Nro ">
+						<h:outputText value="#{blCon.numero}" />
+					</p:column>
+					<p:column headerText="Operador">
+						<h:outputText value="#{blCon.nombreOperador}" />
+					</p:column>
+					<p:column headerText="Peso">
+						<h:outputText value="#{blCon.peso}" />
+					</p:column>
+					<p:column headerText="Sellos">
+						<p:repeat value="#{blCon.blItemContenedorSellos}" var="sell">
+						<h:outputText value="#{sell.codigo}" />
+						<br />
+						<h:outputText value="#{sell.numero}" />
+						<br />
+						<h:outputText value="#{sell.emisor}" />
+						</p:repeat>
+					</p:column>
+					<p:column headerText="Imo">
+						<p:repeat value="#{blCon.blItemContenedorImos}" var="imo">
+						<h:outputText value="#{imo.numeroImo}" />
+						<br />
+						<h:outputText value="#{imo.claseImo}" />
+						
+						</p:repeat>
+					</p:column>
+					
+				</p:dataTable>
+				</p:panel>
+				<p:panel styleClass="card box-success">
+				<p:dataTable  value="#{blI.blItemEquipos}"
+					var="blEqu" type="ordered" style="display: inline-block;width:100%">
+					<f:facet name="header">
+						<h:outputText value="Equipos" />
+					</f:facet>
+					<p:autoUpdate />
+					
+					<p:column headerText="Tipo">
+					<h:outputText value="#{blEqu.tipoEquipo}" />
+				</p:column>
+				<p:column headerText="Sigla">
+					<h:outputText value="#{blEqu.sigla}" />
+				</p:column>
+				<p:column headerText="Identificación">
+					<h:outputText value="#{blEqu.identificacion}" />
+				</p:column>
+				</p:dataTable>
+				</p:panel>
+				<p:panel styleClass="card box-success">
+				<p:dataTable  value="#{blI.blItemVehiculos}"
+					var="blVe" type="ordered" style="display: inline-block;width:100%">
+					<f:facet name="header">
+						<h:outputText value="Vehiculos" />
+					</f:facet>
+					<p:column headerText="Modelo">
+				<h:outputText value="#{blVe.modelo}" />
+			</p:column>
+			<p:column headerText="Id Cajón">
+				<h:outputText value="#{blVe.idCajon}" />
+			</p:column>
+			<p:column headerText="Marca">
+				<h:outputText value="#{blVe.marca}" />
+			</p:column>
+			<p:column headerText="Chassís">
+				<h:outputText value="#{blVe.chassis}" />
+			</p:column>
+			<p:column headerText="Observación">
+				<h:outputText value="#{blVe.observacion}" />
+			</p:column>
+				</p:dataTable>
+				</p:panel>
+				<p:panel styleClass="card box-success">
+				<p:dataTable  value="#{blI.blItemImos}"
+					var="blImo" type="ordered" style="display: inline-block;width:100%">
+					<f:facet name="header">
+						<h:outputText value="ItemImo" />
+					</f:facet>
+					<p:autoUpdate />
+					
+					<p:column headerText="Clase">
+					<h:outputText value="#{blImo.claseImo}" />
+				</p:column>
+				<p:column headerText="Numero">
+					<h:outputText value="#{blImo.numeroImo}" />
+				</p:column>
+				</p:dataTable>
+</p:panel>
+
+			</p:rowExpansion>
+		</p:dataTable>
+	</p:panel>
+
+		<p:panel header="Referencias" style="margin-bottom:20px"
+			styleClass="card no-border">
+			<p:dataTable id="listBlReferenciaVs"
+			value="#{blBean.bl.blReferencias}" var="blRef" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="Tipo Ref">
+				<h:outputText value="#{blRef.tipoReferencia}" />
+			</p:column>
+			<p:column headerText="Tipo Doc">
+				<h:outputText value="#{blRef.tipoDocumento}" />
+			</p:column>
+			<p:column headerText="Numero">
+				<h:outputText value="#{blRef.numero}" />
+			</p:column>
+			<p:column headerText="Fecha">
+				<h:outputText value="#{blRef.fecha}" />
+			</p:column>
+			<p:column headerText="Tipo Emi">
+				<h:outputText value="#{blRef.tipoIdEmisor}" />
+			</p:column>
+			<p:column headerText="Emisor">
+				<h:outputText value="#{blRef.emisor}" />
+			</p:column>
+			<p:column headerText="id Emisor">
+				<h:outputText value="#{blRef.valorIdEmisor}" />
+			</p:column>
+			
+			
+		</p:dataTable>
+		</p:panel>
+		<p:panel header="Obervaciones" style="margin-bottom:20px"
+			styleClass="card no-border">
+			<p:dataTable id="listBlObservVs"
+			value="#{blBean.bl.blObservacions}" var="blO" type="ordered"
+			style="display: inline-block;width:100%">
+			<p:autoUpdate />
+			<p:column headerText="Tipo">
+				<h:outputText value="#{blO.nombre}" />
+			</p:column>
+			<p:column headerText="Descripción">
+				<h:outputText value="#{blO.contenido}" />
+			</p:column>
+			
+			
+		</p:dataTable>
+		</p:panel>
+
+		
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:adm="http://github.com/adminfaces">
+
+<h:outputStylesheet library="css" name="styles.css" />
+
+<h:head>
+
+</h:head>
+<h:body>
+
+	<h:form id="formTablaXml" enctype="multipart/form-data">
+
+		<p:fileUpload fileUploadListener="#{manifiestoBean.recibeXml}"
+			mode="advanced" style="font-size: 14px" multiple="true"
+			widgetVar="subirarchivo" sizeLimit="10000000" uploadLabel="Cargar"
+			cancelLabel="Cancelar" label="Examinar"
+			onstart="limpiar();PF('bls').clearFilters();" skinSimple="true"
+			oncomplete="rc()">
+		</p:fileUpload>
+
+		<p:remoteCommand name="rc"
+			actionListener="#{manifiestoBean.resultados()}" update="@form" />
+		<p:remoteCommand name="limpiar"
+			actionListener="#{manifiestoBean.limpiar()}" />
+
+
+		<p:messages id="messages" showDetail="true" closable="true">
+		</p:messages>
+
+		<p:dataTable id="dtBls" var="bl" value="#{manifiestoBean.listaBls}"
+			emptyMessage="Sin resultados" rows="30" rowIndexVar="rowIndex"
+			rowsPerPageTemplate="30,60,90" widgetVar="bls" paginator="true"
+			paginatorPosition="bottom" style="text-align: center;">
+			<f:facet name="header">
+				<p:outputPanel style="text-align: right;">
+					<p:inputText id="globalFilter" maxlength="35" autocomplete="off"
+						onkeypress="if(event.keyCode == 13) return false"
+						styleClass="filtroGlobal" placeholder="buscar...">
+						<f:ajax event="keyup" delay="800"
+							onevent="function(data){if(data.status=='success') PF('bls').filter()}" />
+					</p:inputText>
+				</p:outputPanel>
+			</f:facet>
+
+			<p:column headerText="#" width="45">
+				<p:outputLabel value="#{rowIndex+1}" />
+			</p:column>
+
+			<p:column headerText="Nro BL" filterBy="#{bl.nroBl}"
+				filterStyle="display:none" filterMatchMode="contains">
+				<p:commandLink action="#{blBean.cargaBlModal(bl)}"
+					onclick="PF('dlgBl').show();">#{bl.nroBl}</p:commandLink>
+			</p:column>
+
+			<p:column headerText="Estado" style="text-aling: center;"
+				filterBy="#{bl.tipoAccionEstado}" filterStyle="display:none"
+				filterMatchMode="contains">
+				<h:outputText value="#{bl.tipoAccionEstado}" />
+			</p:column>
+
+			<p:column headerText="Fecha"
+				filterBy="#{of:formatDate(bl.fechaPresentacion, 'dd-MM-yyyy HH:mm')}"
+				filterStyle="display:none" filterMatchMode="contains">
+				<h:outputText
+					value="#{of:formatDate(bl.fechaPresentacion, 'dd-MM-yyyy HH:mm')}" />
+			</p:column>
+
+			<p:column headerText="Manifiesto" filterBy="#{bl.manifiesto.nroMfto}"
+				filterStyle="display:none" filterMatchMode="contains">
+				<h:outputText value="#{bl.manifiesto.nroMfto}" />
+			</p:column>
+
+			<p:column headerText="Emisor" width="300"
+				filterBy="#{bl.nombreParticipanteEmisor}" filterStyle="display:none"
+				filterMatchMode="contains">
+				<h:outputText value="#{bl.nombreParticipanteEmisor}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	
+	<p:dialog header="Detalle de BL" widgetVar="dlgBl" modal="true"
+		height="550" width="80%">
+		<ui:include src="vistaBls.xhtml" />
+	</p:dialog>
+
+
+</h:body>
+</html>
