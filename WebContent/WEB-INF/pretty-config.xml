@@ -11,7 +11,11 @@
 		<pattern value="/administracion" />
 		<view-id value="/pages/administracion/usuarios.xhtml" />	
 	</url-mapping>
-<url-mapping id="contro">
+<url-mapping id="herramienta">
+		<pattern value="/herramientas" />
+		<view-id value="/pages/control/OCR.xhtml" />	
+	</url-mapping>
+	<url-mapping id="contro">
 		<pattern value="/control" />
 		<view-id value="/pages/control/control.xhtml" />	
 	</url-mapping>
